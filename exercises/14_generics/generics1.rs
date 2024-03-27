@@ -6,9 +6,16 @@
 // Execute `rustlings hint generics1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 fn main() {
-    let mut shopping_list: Vec<?> = Vec::new();
+    let milk: String = String::from("millkkk");
+    let mut shopping_list: Vec<_> = Vec::new();
     shopping_list.push("milk");
+    {
+        shopping_list.push(&milk);
+    }
+
+    for s in shopping_list.iter(){
+        println!("Stuff {}" , s);
+    }
+    println!("End of scope??");
 }
