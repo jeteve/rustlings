@@ -10,7 +10,8 @@
 
 // I AM NOT DONE
 
-fn longest(x: &str, y: &str) -> &str {
+// Means the returned value has a lifetime that's as short as the other 'a's
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
         x
     } else {
