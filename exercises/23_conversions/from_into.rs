@@ -44,7 +44,15 @@ impl Default for Person {
 // I AM NOT DONE
 
 impl From<&str> for Person {
-    fn from(s: &str) -> Person {}
+    fn from(s: &str) -> Person {
+        s.split_once(',').map_or(Person::default(), |(n,a)|{
+            match (n.len() , a.parse::<usize>() ) {
+                (0 , _ ) =>  Person::default(),
+                (_ , Err(_)) =>  Person::default(),
+                ( _ , Ok(a)) => Person{name: n.into(), age: a}
+            }
+        })
+    }
 }
 
 fn main() {

@@ -49,9 +49,45 @@ enum ParsePersonError {
 // you want to return a string error message, you can do so via just using
 // return `Err("my error message".into())`.
 
+impl Person{
+    fn from_string(s: &str) -> Result<Person, ParsePersonError>{
+
+        let v = (!s.is_empty())
+        .then(||{s.split(',').collect::<Vec<&str>>()})
+        .ok_or(ParsePersonError::Empty)?;
+
+        v.len().eq(&2)
+        .then(|| !v.get(0).unwrap().is_empty() )
+        .ok_or(ParsePersonError::BadLen)?
+        .then()
+        todo!()
+    }
+}
+
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.is_empty() {
+            return Err(ParsePersonError::Empty);
+        }
+
+
+
+        let fields = s.split(',').collect::<Vec<&str>>();
+        if fields.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+
+        let &name = fields.get(0).unwrap();
+
+        if name.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+
+        let age = fields.get(1).unwrap().parse::<usize>().map_err(|e| ParsePersonError::ParseInt(e))?;
+
+
+        Ok(Person{ name: name.to_string(), age: age})
     }
 }
 
