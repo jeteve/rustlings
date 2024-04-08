@@ -31,8 +31,6 @@ enum ParsePersonError {
     ParseInt(ParseIntError),
 }
 
-// I AM NOT DONE
-
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
 // 2. Split the given string on the commas present in it
@@ -49,20 +47,6 @@ enum ParsePersonError {
 // you want to return a string error message, you can do so via just using
 // return `Err("my error message".into())`.
 
-impl Person{
-    fn from_string(s: &str) -> Result<Person, ParsePersonError>{
-
-        let v = (!s.is_empty())
-        .then(||{s.split(',').collect::<Vec<&str>>()})
-        .ok_or(ParsePersonError::Empty)?;
-
-        v.len().eq(&2)
-        .then(|| !v.get(0).unwrap().is_empty() )
-        .ok_or(ParsePersonError::BadLen)?
-        .then()
-        todo!()
-    }
-}
 
 impl FromStr for Person {
     type Err = ParsePersonError;

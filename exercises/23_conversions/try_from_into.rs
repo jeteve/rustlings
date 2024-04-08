@@ -41,6 +41,7 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        [tuple.0, tuple.1, tuple.2].try_into()
     }
 }
 
@@ -48,6 +49,11 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        if arr.iter().all(|v| (0..=255).contains(v)) {
+            Ok(Color{ red: arr[0] as u8, green: arr[1] as u8, blue: arr[2] as u8 })
+        }else{
+            Err(IntoColorError::IntConversion)
+        }
     }
 }
 
@@ -55,6 +61,12 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() == 3 {
+            let arr: [i16; 3] = slice[0..=2].try_into().unwrap();
+            arr.try_into()
+        }else{
+            Err(IntoColorError::BadLen)
+        }
     }
 }
 

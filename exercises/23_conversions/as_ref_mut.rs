@@ -10,6 +10,7 @@
 // Obtain the number of bytes (not characters) in the given argument.
 // TODO: Add the AsRef trait appropriately as a trait bound.
 
+
 // Anything that can be turned into a Reference to str ( aka &str )
 fn byte_counter<T:AsRef<str>>(arg: T) -> usize {
     arg.as_ref().as_bytes().len()
@@ -34,6 +35,7 @@ fn num_sq<T: AsMut<u32>>(arg: &mut T) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::{borrow::Cow, rc::Rc};
 
     #[test]
     fn different_counts() {
@@ -56,6 +58,18 @@ mod tests {
     #[test]
     fn same_counts_using_string() {
         let s = String::from("Cafe au lait");
+        assert_eq!(char_counter(s.clone()), byte_counter(s));
+    }
+
+    #[test]
+    fn same_counts_using_rc(){
+        let s: Rc<str> = "Cafe".into();
+        assert_eq!(char_counter(s.clone()), byte_counter(s));
+    }
+
+    #[test]
+    fn same_counts_using_cow(){
+        let s: Cow<str> = "Cafe".into();
         assert_eq!(char_counter(s.clone()), byte_counter(s));
     }
 
